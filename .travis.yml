@@ -6,17 +6,13 @@ go:
   - 1.4.2
   - tip
 
-env:
-  # coveralls
-  secure: "FGfJvnrGn/SeY720u+JoY5+jpDxNDHWoIFKmCfsWYUVEIYum/M9ka2FfzXzvV+n27CbytJPrlJi9jiTt9K/02P/yPYRmcBCqw6/lVyCcfJ08uKN7lifpMa92qhPVZcoeXf0iRG5/A0L8fzk7klFNX358i3gSynpi70NbyqzM9r6K8DKJ3UV/IvWSQOVrZfcwkACiki0R7AChUSiRIlifZ6mSSmBcyOlq7OYeVYDRBJCSZsedQZeKBIEu6ZqHSFlXq9GHD23ubikNASyYMtW3v5ZKm8x6Unf3xh8iVShYZZaSUgX5eZ4ivnOYyuS/KmSLDgeSqEWVhdk/Wv5njijqvDaZpQI4r2exdPxGQ7ygyDr5pk7Rhuq57MKAM5Zkcf0ZnGx7H8TpatKn/YmHcrItsUYahRm2wKcMV4p6W3CMt/hEcruIfA3p3Grd8+cJ56IUfuAMtWU7ADPZrqGZm8DIuFSww+73hQ86Ofwd0lFx+wFiztgmn8vNtxKrbUnxUm4DoSoUPG3OQdvIqLLlCrv3zw/XUqx1AigVs9lTemwJZbiMrGkMNPR64PGHsWsf+CEA8/O0UE4u9plrxGghYEo9FrhW4YNYxdPHZjGOpL6gY9dfrW1OfUKQ4Ore1n2CDtFU/HhAwxHafSjQ+DFxuMOfFnb82zWJKn7yj/wFfhiW50s="
-
-install:
+before_install:
   - go get -t -v ./...
+  - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
+  - go get golang.org/x/tools/cmd/cover
 
 script:
   - go test -v -covermode=count -coverprofile=profile.cov .
-
-after_success:
   - go tool cover -func profile.cov
-  - goveralls -coverprofile=profile.cov -service=travis-pro -repotoken=$COVERALLS_TOKEN
+  - goveralls -coverprofile=profile.cov -service=travis-ci
