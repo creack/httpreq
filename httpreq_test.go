@@ -228,6 +228,16 @@ func TestToFloat64(t *testing.T) {
 	}
 }
 
+func TestToTSTimeChain(t *testing.T) {
+	src, dest := "1437743020", time.Time{}
+	if err := NewParsingMap().ToTSTime("ts", &dest).Parse(mockForm{"ts": src}); err != nil {
+		t.Fatal(err)
+	}
+	if expect, got := time.Unix(1437743020, 0), dest; expect.Sub(got) != 0 {
+		t.Fatalf("Unexpected result.\nExpect:\t%s\nGot:\t%s\n", expect, got)
+	}
+}
+
 func TestToTSTime(t *testing.T) {
 	src, dest := "1437743020", time.Time{}
 	if err := ToTSTime(src, &dest); err != nil {
@@ -253,6 +263,20 @@ func TestToTSTime(t *testing.T) {
 	src, dest = "abc", time.Time{}
 	if err := ToTSTime(src, &dest); err == nil {
 		t.Fatal("Invalid timestamp should yield an error")
+	}
+}
+
+func TestToRFC3339TimeChain(t *testing.T) {
+	src, dest := "2006-01-02T15:04:05Z", time.Time{}
+	if err := NewParsingMap().ToRFC3339Time("date", &dest).Parse(mockForm{"date": src}); err != nil {
+		t.Fatal(err)
+	}
+	tt, err := time.Parse(time.RFC3339, src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if expect, got := tt, dest; expect.Sub(got) != 0 {
+		t.Fatalf("Unexpected result.\nExpect:\t%s\nGot:\t%s\n", expect, got)
 	}
 }
 

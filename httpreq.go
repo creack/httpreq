@@ -39,6 +39,13 @@ func NewParsingMap() *ParsingMap {
 	return &ParsingMap{}
 }
 
+// NewParsingMapPre create a new preallocated parsing map and returns a pointer to
+// be able to call Add directly.
+func NewParsingMapPre(n int) *ParsingMap {
+	p := make(ParsingMap, 0, n)
+	return &p
+}
+
 // Add inserts a new field definition in the ParsingMap.
 func (p *ParsingMap) Add(field string, fct func(string, interface{}) error, dest interface{}) *ParsingMap {
 	*p = append(*p, ParsingMapElem{Field: field, Fct: fct, Dest: dest})
@@ -67,6 +74,12 @@ func ToCommaList(src string, dest interface{}) error {
 	return nil
 }
 
+// ToCommaList is a helper for ToCommaList.
+func (p *ParsingMap) ToCommaList(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToCommaList, Dest: dest})
+	return p
+}
+
 // ToString takes the given string and sets it to `dest`.
 func ToString(src string, dest interface{}) error {
 	d, ok := dest.(*string)
@@ -75,6 +88,12 @@ func ToString(src string, dest interface{}) error {
 	}
 	*d = src
 	return nil
+}
+
+// ToString is a helper for ToString.
+func (p *ParsingMap) ToString(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToString, Dest: dest})
+	return p
 }
 
 // ToBool takes the given string, parses it as bool and sets it to `dest`.
@@ -93,6 +112,12 @@ func ToBool(src string, dest interface{}) error {
 	return nil
 }
 
+// ToBool is a helper for ToBool.
+func (p *ParsingMap) ToBool(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToBool, Dest: dest})
+	return p
+}
+
 // ToInt takes the given string, parses it as int and sets it to `dest`.
 func ToInt(src string, dest interface{}) error {
 	d, ok := dest.(*int)
@@ -107,6 +132,12 @@ func ToInt(src string, dest interface{}) error {
 	return nil
 }
 
+// ToInt is a helper for ToInt.
+func (p *ParsingMap) ToInt(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToInt, Dest: dest})
+	return p
+}
+
 // ToFloat64 takes the given string, parses it as float64 and sets it to `dest`.
 func ToFloat64(src string, dest interface{}) error {
 	d, ok := dest.(*float64)
@@ -119,6 +150,12 @@ func ToFloat64(src string, dest interface{}) error {
 	}
 	*d = f
 	return nil
+}
+
+// ToFloat64 is a helper for ToFloat64.
+func (p *ParsingMap) ToFloat64(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToFloat64, Dest: dest})
+	return p
 }
 
 // ToTSTime takes the given string, parses it as timestamp and sets it to `dest`.
@@ -142,6 +179,12 @@ func ToTSTime(src string, dest interface{}) error {
 	return nil
 }
 
+// ToTSTime is a helper for ToTSTime.
+func (p *ParsingMap) ToTSTime(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToTSTime, Dest: dest})
+	return p
+}
+
 // ToRFC3339Time takes the given string, parses it as timestamp and sets it to `dest`.
 func ToRFC3339Time(src string, dest interface{}) error {
 	t, err := time.Parse(time.RFC3339, src)
@@ -160,4 +203,10 @@ func ToRFC3339Time(src string, dest interface{}) error {
 	}
 	*d = &t
 	return nil
+}
+
+// ToRFC3339Time is a helper for ToRFC3339Time.
+func (p *ParsingMap) ToRFC3339Time(field string, dest interface{}) *ParsingMap {
+	*p = append(*p, ParsingMapElem{Field: field, Fct: ToRFC3339Time, Dest: dest})
+	return p
 }
