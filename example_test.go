@@ -1,4 +1,4 @@
-package httpreq
+package httpreq_test
 
 import (
 	"encoding/json"
@@ -8,6 +8,8 @@ import (
 	"net/http/httptest"
 	"os"
 	"time"
+
+	"github.com/creack/httpreq"
 )
 
 func Example() {
@@ -23,11 +25,11 @@ func Example() {
 	hdlr := func(w http.ResponseWriter, req *http.Request) {
 		_ = req.ParseForm()
 		data := &Req{}
-		if err := (ParsingMap{
-			{Field: "limit", Fct: ToInt, Dest: &data.Limit},
-			{Field: "page", Fct: ToInt, Dest: &data.Page},
-			{Field: "fields", Fct: ToCommaList, Dest: &data.Fields},
-			{Field: "timestamp", Fct: ToTSTime, Dest: &data.Timestamp},
+		if err := (httpreq.ParsingMap{
+			{Field: "limit", Fct: httpreq.ToInt, Dest: &data.Limit},
+			{Field: "page", Fct: httpreq.ToInt, Dest: &data.Page},
+			{Field: "fields", Fct: httpreq.ToCommaList, Dest: &data.Fields},
+			{Field: "timestamp", Fct: httpreq.ToTSTime, Dest: &data.Timestamp},
 		}.Parse(req.Form)); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -57,10 +59,10 @@ func Example_add() {
 	}
 	hdlr := func(w http.ResponseWriter, req *http.Request) {
 		data := &Req{}
-		if err := NewParsingMap().
-			Add("limit", ToInt, &data.Limit).
-			Add("page", ToInt, &data.Page).
-			Add("fields", ToCommaList, &data.Fields).
+		if err := httpreq.NewParsingMap().
+			Add("limit", httpreq.ToInt, &data.Limit).
+			Add("page", httpreq.ToInt, &data.Page).
+			Add("fields", httpreq.ToCommaList, &data.Fields).
 			Parse(req.URL.Query()); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -92,7 +94,7 @@ func Example_chain() {
 	}
 	hdlr := func(w http.ResponseWriter, req *http.Request) {
 		data := &Req{}
-		if err := NewParsingMapPre(5).
+		if err := httpreq.NewParsingMapPre(5).
 			ToInt("limit", &data.Limit).
 			ToBool("dryrun", &data.DryRun).
 			ToFloat64("threshold", &data.Threshold).
