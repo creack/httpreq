@@ -13,8 +13,9 @@ import (
 )
 
 func Example() {
-	defer os.Setenv("TZ", os.Getenv("TZ"))
-	os.Setenv("TZ", "UTC")
+	origTZ := os.Getenv("TZ")
+	defer func() { _ = os.Setenv("TZ", origTZ) }()
+	_ = os.Setenv("TZ", "UTC")
 
 	type Req struct {
 		Fields    []string
@@ -26,10 +27,10 @@ func Example() {
 		_ = req.ParseForm()
 		data := &Req{}
 		if err := (httpreq.ParsingMap{
-			{Field: "limit", Fct: httpreq.ToInt, Dest: &data.Limit},
-			{Field: "page", Fct: httpreq.ToInt, Dest: &data.Page},
-			{Field: "fields", Fct: httpreq.ToCommaList, Dest: &data.Fields},
-			{Field: "timestamp", Fct: httpreq.ToTSTime, Dest: &data.Timestamp},
+			0: {Field: "limit", Fct: httpreq.ToInt, Dest: &data.Limit},
+			1: {Field: "page", Fct: httpreq.ToInt, Dest: &data.Page},
+			2: {Field: "fields", Fct: httpreq.ToCommaList, Dest: &data.Fields},
+			3: {Field: "timestamp", Fct: httpreq.ToTSTime, Dest: &data.Timestamp},
 		}.Parse(req.Form)); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return

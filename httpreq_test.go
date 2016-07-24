@@ -12,8 +12,9 @@ import (
 )
 
 func TestHandler(t *testing.T) {
-	defer os.Setenv("TZ", os.Getenv("TZ"))
-	os.Setenv("TZ", "UTC")
+	origTZ := os.Getenv("TZ")
+	defer func() { _ = os.Setenv("TZ", origTZ) }()
+	_ = os.Setenv("TZ", "UTC")
 
 	type Req struct {
 		Fields    []string
