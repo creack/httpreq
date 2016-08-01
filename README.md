@@ -2,7 +2,7 @@
 
 The package provides an easy way to "unmarshal" query string data into a struct. Without reflect.
 
-[![GoDoc](https://godoc.org/github.com/creack/httpreq?status.svg)](https://godoc.org/github.com/creack/httpreq) [![Build Status](https://travis-ci.org/creack/httpreq.svg)](https://travis-ci.org/creack/httpreq) [![Coverage Status](https://coveralls.io/repos/github/creack/httpreq/badge.svg?branch=master)](https://coveralls.io/github/creack/httpreq?branch=master)
+[![GitHub release](https://img.shields.io/github/release/creack/httpreq.svg?maxAge=2592000)]() [![GoDoc](https://godoc.org/github.com/creack/httpreq?status.svg)](https://godoc.org/github.com/creack/httpreq) [![Build Status](https://travis-ci.org/creack/httpreq.svg)](https://travis-ci.org/creack/httpreq) [![Coverage Status](https://coveralls.io/repos/github/creack/httpreq/badge.svg?branch=master)](https://coveralls.io/github/creack/httpreq?branch=master)
 
 # Example
 
